@@ -106,38 +106,39 @@ function IndicatorWidgetView(props: IndicatorWidgetViewProps) {
       className="w-24 h-24 p-2 relative"
       style={{ backgroundColor: props.bgColor }}
     >
-      <div className="w-full h-full text-center">
+      <div className="w-full h-full flex flex-col gap-2 items-center">
         {props.icon && (
-          <div className="w-full text-center">
+          <div className="text-center w-20 h-10 ">
             {/* @ts-expect-error: Allow custom web component */}
-            <ha-icon
-              style={{ "--mdc-icon-size": "3.5rem" }}
-              icon={props.icon}
-            />
+            <ha-icon style={{ "--mdc-icon-size": "3rem" }} icon={props.icon} />
           </div>
         )}
-        <div className="text-lg whitespace-nowrap">{props.value ?? "N/A"}</div>
+        {!props.icon && (
+          <div className="whitespace-nowrap w-20 h-10 text-center text-3xl overflow-clip ">
+            {props.value ?? "N/A"}
+          </div>
+        )}
         {props.title && (
           <div className="text-sm whitespace-nowrap ">{props.title}</div>
         )}
       </div>
       {props.valueNW && (
-        <div className="absolute top-0 left-0 p-1 text-tiny text-white">
+        <div className="absolute top-0 left-0 p-1 text-xxs text-white">
           {props.valueNW}
         </div>
       )}
       {props.valueNE && (
-        <div className="absolute top-0 right-0 p-1 text-tiny text-white">
+        <div className="absolute top-0 right-0 p-1 text-xxs text-white">
           {props.valueNE}
         </div>
       )}
       {props.valueSW && (
-        <div className="absolute bottom-0 left-0 p-1 text-tiny text-white">
+        <div className="absolute bottom-0 left-0 p-1 text-xxs text-white">
           {props.valueSW}
         </div>
       )}
       {props.valueSE && (
-        <div className="absolute bottom-0 right-0 p-1 text-tiny text-white">
+        <div className="absolute bottom-0 right-0 p-1 text-xxs text-white">
           {props.valueSE}
         </div>
       )}
