@@ -1,6 +1,7 @@
 import registerCard from "./utils/registerCard"
 import styles from "./App.css?inline"
 import { IndicatorWidgetCard } from "./cards/IndicatorWidgetCard"
+import { FlexContainerCard } from "./cards/FlexContainerCard"
 
 // function loadCSS(url: string) {
 //   const link = document.createElement("link")
@@ -19,3 +20,4 @@ function loadDirectCSS(styles: string) {
 loadDirectCSS(styles)
 
 registerCard("ha-homepanel-indicator-widget", IndicatorWidgetCard)
+registerCard("ha-homepanel-flex-container", FlexContainerCard)

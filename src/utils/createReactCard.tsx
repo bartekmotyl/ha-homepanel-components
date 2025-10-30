@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client"
 import type { HomeAssistant, LovelaceCardConfig } from "custom-card-helpers"
 import styles from "../App.css?inline"
 import type { CustomCardReactComponent } from "./registerCard"
+import { HomeAssistantContext } from "./homeAssistantContext"
 
 const createReactCard = (
   name: string,
@@ -34,13 +35,11 @@ const createReactCard = (
     }
 
     render() {
-      // const style = document.createElement("style")
-      // style.textContent = styles
-      // this.shadowRoot!.appendChild(style)
-
       this.root.render(
         <React.StrictMode>
-          <ReactComponent config={this.config} hass={this.state} />
+          <HomeAssistantContext value={this.state}>
+            <ReactComponent config={this.config} />
+          </HomeAssistantContext>
         </React.StrictMode>
       )
     }

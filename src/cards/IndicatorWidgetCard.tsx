@@ -1,4 +1,4 @@
-import { memo } from "react"
+import { memo, useContext } from "react"
 import type { LovelaceCardConfig } from "custom-card-helpers"
 import type { CardProps } from "../utils/registerCard"
 import {
@@ -7,6 +7,7 @@ import {
   lookupEntityInState,
 } from "../utils/widgetUtils"
 import type { NamedColorKeys } from "../theme/standardTheme"
+import { HomeAssistantContext } from "../utils/homeAssistantContext"
 
 interface IndicatorWidgetCardConfig extends LovelaceCardConfig {
   title?: string
@@ -25,7 +26,8 @@ interface IndicatorWidgetCardConfig extends LovelaceCardConfig {
 
 const IndicatorWidgetMemo = memo(IndicatorWidgetView)
 
-export function IndicatorWidgetCard({ config, hass }: CardProps) {
+export function IndicatorWidgetCard({ config }: CardProps) {
+  const hass = useContext(HomeAssistantContext)
   const configTyped = config as IndicatorWidgetCardConfig | undefined
 
   const entityMain = lookupEntityInState(hass, configTyped?.entity)

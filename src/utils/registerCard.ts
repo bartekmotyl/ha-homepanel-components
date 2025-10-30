@@ -1,10 +1,9 @@
-import type { HomeAssistant, LovelaceCardConfig } from "custom-card-helpers"
+import type { LovelaceCardConfig } from "custom-card-helpers"
 import createReactCard from "./createReactCard"
 import type { JSX } from "react"
 
 export interface CardProps {
   config: LovelaceCardConfig | undefined
-  hass: HomeAssistant | undefined
 }
 
 export type CustomCardReactComponent = (props: CardProps) => JSX.Element
