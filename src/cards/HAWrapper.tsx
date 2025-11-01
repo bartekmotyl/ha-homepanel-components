@@ -16,6 +16,7 @@ export function HAWrapper({ card }: HAWrapperConfig) {
 
     async function loadCard(container: HTMLDivElement) {
       const control = (await createCardElement(card)) as LovelaceCard
+      control.hass = hass!
       container.innerHTML = ""
       container.appendChild(control)
     }
@@ -37,7 +38,7 @@ export function HAWrapper({ card }: HAWrapperConfig) {
         ;(child as LovelaceCard).hass = hass
       })
     }
-  }, [hass])
+  }, [hass, containerRef])
 
   return <div ref={containerRef} className="w-fit h-fit"></div>
 }
