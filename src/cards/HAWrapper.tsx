@@ -16,7 +16,9 @@ export function HAWrapper({ card }: HAWrapperConfig) {
 
     async function loadCard(container: HTMLDivElement) {
       const control = (await createCardElement(card)) as LovelaceCard
-      control.hass = hass!
+      // we set hass as it is now, but do not include it as dependency in useEffect
+      // there is a separate useEffects responsible for updating hass on the child card
+      control.hass = hass
       container.innerHTML = ""
       container.appendChild(control)
     }
@@ -30,6 +32,7 @@ export function HAWrapper({ card }: HAWrapperConfig) {
         container.innerHTML = ""
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [card])
 
   useEffect(() => {

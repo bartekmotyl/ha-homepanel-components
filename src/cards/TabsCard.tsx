@@ -21,8 +21,10 @@ export function TabsCard({ config }: CardProps) {
         {configTyped?.pages.map((tab, index) => (
           <div
             className={`p-2 ${
-              activeTabIndex === index ? "border-b-2 border-b-green-700" : ""
-            } cursor-pointer uppercase`}
+              activeTabIndex === index
+                ? " border-b-green-700"
+                : "border-b-transparent"
+            } cursor-pointer uppercase transition-colors duration-700 border-b-2 `}
             onClick={() => setActiveTabIndex(index)}
           >
             {tab.title}
