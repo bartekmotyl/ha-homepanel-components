@@ -110,37 +110,37 @@ function IndicatorWidgetView(props: IndicatorWidgetViewProps) {
     >
       <div className="w-full h-full flex flex-col gap-2 items-center">
         {props.icon && (
-          <div className="text-center w-20 h-10 ">
+          <div className="text-center w-20 h-10" style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3)) drop-shadow(0 4px 8px rgba(0,0,0,0.2))" }}>
             {/* @ts-expect-error: Allow custom web component */}
             <ha-icon style={{ "--mdc-icon-size": "3rem" }} icon={props.icon} />
           </div>
         )}
         {!props.icon && (
-          <div className="whitespace-nowrap w-20 h-10 text-center text-3xl overflow-clip font-bold ">
+          <div className="whitespace-nowrap w-20 h-10 text-center text-3xl overflow-clip font-bold" style={{ textShadow: "0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2)" }}>
             {props.value ?? "N/A"}
           </div>
         )}
         {props.title && (
-          <div className="text-sm text-center font-bold">{props.title}</div>
+          <div className="text-sm text-center font-bold" style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.15)" }}>{props.title}</div>
         )}
       </div>
       {props.valueNW && (
-        <div className="absolute top-0 left-0 p-1 text-xxs text-white">
+        <div className="absolute top-0 left-0 p-1 text-xxs text-white" style={{ textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}>
           {props.valueNW}
         </div>
       )}
       {props.valueNE && (
-        <div className="absolute top-0 right-0 p-1 text-xxs text-white">
+        <div className="absolute top-0 right-0 p-1 text-xxs text-white" style={{ textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}>
           {props.valueNE}
         </div>
       )}
       {props.valueSW && (
-        <div className="absolute bottom-0 left-0 p-1 text-xxs text-white">
+        <div className="absolute bottom-0 left-0 p-1 text-xxs text-white" style={{ textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}>
           {props.valueSW}
         </div>
       )}
       {props.valueSE && (
-        <div className="absolute bottom-0 right-0 p-1 text-xxs text-white">
+        <div className="absolute bottom-0 right-0 p-1 text-xxs text-white" style={{ textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}>
           {props.valueSE}
         </div>
       )}
