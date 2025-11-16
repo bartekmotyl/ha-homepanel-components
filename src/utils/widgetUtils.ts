@@ -31,6 +31,10 @@ export function resolveColor(color: string) {
 
 
 export function findInNumberRange(spec: string, value: string): string | undefined {
+  // Extract default value if present (using ?? syntax)
+  const parts = spec.split("??")
+  const rangeSpec = parts[0]
+  const defaultValue = parts[1]?.trim()
 
   function parse(spec: string) {
     return spec.split(";").map((part) => {
@@ -43,11 +47,11 @@ export function findInNumberRange(spec: string, value: string): string | undefin
     })
   }
 
-  const ranges = parse(spec)
+  const ranges = parse(rangeSpec)
 
   const val = Number(value)
   if (value === undefined || value === null || isNaN(val)) {
-    return undefined
+    return defaultValue
   }
   for (const range of ranges) {
     if (range.range === null || val < range.range) {

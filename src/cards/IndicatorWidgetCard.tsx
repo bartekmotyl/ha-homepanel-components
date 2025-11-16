@@ -116,12 +116,12 @@ function IndicatorWidgetView(props: IndicatorWidgetViewProps) {
           </div>
         )}
         {!props.icon && (
-          <div className="whitespace-nowrap w-20 h-10 text-center text-3xl overflow-clip ">
+          <div className="whitespace-nowrap w-20 h-10 text-center text-3xl overflow-clip font-bold ">
             {props.value ?? "N/A"}
           </div>
         )}
         {props.title && (
-          <div className="text-sm whitespace-nowrap ">{props.title}</div>
+          <div className="text-sm text-center font-bold">{props.title}</div>
         )}
       </div>
       {props.valueNW && (

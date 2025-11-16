@@ -10,13 +10,18 @@ type TabConfig = {
 
 interface TabsCardConfig extends LovelaceCardConfig {
   pages: TabConfig[]
+  widthExpr?: string
+  heightExpr?: string
 }
 
 export function TabsCard({ config }: CardProps) {
   const configTyped = config as TabsCardConfig | undefined
   const [activeTabIndex, setActiveTabIndex] = useState(0)
   return (
-    <div className="flex flex-col border border-gray-700 border-dashed">
+    <div
+      className="flex flex-col border border-gray-700 border-dashed"
+      style={{ width: configTyped?.widthExpr, height: configTyped?.heightExpr }}
+    >
       <div className="flex flex-row w-full pb-1">
         {configTyped?.pages.map((tab, index) => (
           <div
@@ -33,7 +38,7 @@ export function TabsCard({ config }: CardProps) {
       </div>
       {configTyped?.pages.map((tab, index) => (
         <div
-          className="w-full"
+          className="w-full flex flex-row flex-wrap"
           style={{ display: index === activeTabIndex ? "block" : "none" }}
         >
           {tab.cards.map((card, cardIndex) => (
