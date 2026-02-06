@@ -5,11 +5,9 @@ import { HomeAssistantContext } from "../utils/homeAssistantContext"
 
 interface HAWrapperConfig {
   card: LovelaceCardConfig
-  fullHeight: boolean
-  fullWidth: boolean
 }
 
-export function HAWrapper({ card, fullHeight, fullWidth }: HAWrapperConfig) {
+export function HAWrapper({ card }: HAWrapperConfig) {
   const containerRef = useRef<HTMLDivElement>(null)
   const hass = useContext(HomeAssistantContext)
 
@@ -48,7 +46,8 @@ export function HAWrapper({ card, fullHeight, fullWidth }: HAWrapperConfig) {
   return (
     <div
       ref={containerRef}
-      className={`w-${fullWidth ? "full" : "fit"} h-${fullHeight ? "full" : "fit"} `}
+      className="w-fit h-fit"
+      style={{ width: card?.width, height: card?.height }}
     ></div>
   )
 }

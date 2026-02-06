@@ -6,12 +6,12 @@ interface FlexContainerCardConfig extends LovelaceCardConfig {
   cards: LovelaceCardConfig[]
 }
 
-export function FlexContainerCard({ config }: CardProps) {
+export function FlexRowContainerCard({ config }: CardProps) {
   const configTyped = config as FlexContainerCardConfig | undefined
 
   return (
     <div
-      className="flex flex-row flex-wrap items-start content-start w-128 h-128 gap-1 overflow-y-auto"
+      className="flex flex-row items-start content-start w-full h-full gap-1 overflow-y-auto overflow-x-auto"
       style={{ width: configTyped?.width, height: configTyped?.height }}
     >
       {configTyped?.cards.map((card, index) => (
