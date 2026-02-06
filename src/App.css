@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 @theme {  
   --text-xxs: 0.625rem; 
   --default-font-family: 'Lato', sans-serif;

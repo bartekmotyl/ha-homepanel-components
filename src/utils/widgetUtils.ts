@@ -9,20 +9,20 @@ export function lookupEntityInState(
   if (!hass || !entityId) return undefined
   return hass.states?.[entityId]
 }
-nunjucks.configure({ autoescape: true })
 
+const env = new nunjucks.Environment(null, { autoescape: true })
+
+// Register findInNumberRange as a Nunjucks filter with alias 'nr'
+env.addFilter('nr', function (value: unknown, spec: string) {
+  return findInNumberRange(spec, String(value))
+})
 
 export function evaluateExpression(expr: string, value: string, data: object, hass: HomeAssistant | undefined) {
-  if (expr.startsWith("nr:")) {
-    const spec = expr.substring(3)
-    return findInNumberRange(spec, value) ?? undefined
-  }
-
-  return nunjucks.renderString(expr, { v: value, hass: hass, ...data })
+  return env.renderString(expr, { v: value, hass: hass, ...data })
 }
 
 export function evaluateTemplate(template: string | undefined, data: object) {
-  return nunjucks.renderString(template ?? '', { ...data })
+  return env.renderString(template ?? '', { ...data })
 }
 
 export function resolveColor(color: string) {

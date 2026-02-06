@@ -7,7 +7,7 @@ import { HomeAssistantContext } from "./homeAssistantContext"
 
 const createReactCard = (
   name: string,
-  ReactComponent: CustomCardReactComponent
+  ReactComponent: CustomCardReactComponent,
 ) => {
   return class Card extends HTMLElement {
     private container: HTMLDivElement
@@ -19,6 +19,8 @@ const createReactCard = (
       super()
       this.attachShadow({ mode: "open" })
       this.container = document.createElement("div")
+      this.container.style.width = "100%"
+      this.container.style.height = "100%"
       this.shadowRoot!.appendChild(this.container)
       const style = document.createElement("style")
       style.textContent = styles
@@ -40,7 +42,7 @@ const createReactCard = (
           <HomeAssistantContext value={this.state}>
             <ReactComponent config={this.config} />
           </HomeAssistantContext>
-        </React.StrictMode>
+        </React.StrictMode>,
       )
     }
 
@@ -61,7 +63,7 @@ const createReactCard = (
     getCardSize() {
       return Math.max(
         1,
-        Math.ceil(this.shadowRoot!.host.getBoundingClientRect().height / 50)
+        Math.ceil(this.shadowRoot!.host.getBoundingClientRect().height / 50),
       )
     }
   }
