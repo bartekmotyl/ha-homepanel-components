@@ -4,6 +4,7 @@ import { IndicatorWidgetCard } from "./cards/IndicatorWidgetCard"
 import { FlexContainerCard } from "./cards/FlexContainerCard"
 import { TabsCard } from "./cards/TabsCard"
 import { FlexRowContainerCard } from "./cards/FlexRowContainerCard"
+import { SimpleCoverCard } from "./cards/SimpleCoverCard"
 
 // function loadCSS(url: string) {
 //   const link = document.createElement("link")
@@ -25,3 +26,4 @@ registerCard("ha-homepanel-indicator-widget", IndicatorWidgetCard)
 registerCard("ha-homepanel-flex-container", FlexContainerCard)
 registerCard("ha-homepanel-flex-row-container", FlexRowContainerCard)
 registerCard("ha-homepanel-tabs", TabsCard)
+registerCard("ha-homepanel-simple-cover", SimpleCoverCard)
