@@ -37,7 +37,7 @@ export function TabsCard({ config }: CardProps) {
       </div>
       {configTyped?.pages.map((tab, index) => (
         <div
-          className="w-full h-full flex flex-row flex-wrap items-start gap-1 overflow-y-auto"
+          className="w-full flex-1 flex flex-row flex-wrap content-start gap-1 overflow-y-auto p-1"
           style={{ display: index === activeTabIndex ? "flex" : "none" }}
         >
           {tab.cards.map((card, cardIndex) => (

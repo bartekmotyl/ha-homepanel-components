@@ -185,14 +185,11 @@ function formatTime(totalSeconds: number): string {
 
 function TimerWidgetCardView(props: TimerWidgetCardViewProps) {
   const { timerState, onStart, onReset } = props
+  const containerRef = useRef<HTMLDivElement>(null)
   const longPressTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const longPressTriggered = useRef(false)
 
-  const handlePressStart = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-    // Prevent touch events from also triggering mouse events
-    if (e.type === "touchstart") {
-      e.preventDefault()
-    }
+  const handlePressStart = useCallback(() => {
     longPressTriggered.current = false
 
     // Set timeout to trigger reset immediately when threshold is reached
@@ -202,12 +199,7 @@ function TimerWidgetCardView(props: TimerWidgetCardViewProps) {
     }, LONG_PRESS_THRESHOLD_MS)
   }, [onReset])
 
-  const handlePressEnd = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-    // Prevent touch events from also triggering mouse events
-    if (e.type === "touchend") {
-      e.preventDefault()
-    }
-
+  const handlePressEnd = useCallback(() => {
     // Clear the long press timeout
     if (longPressTimeout.current) {
       clearTimeout(longPressTimeout.current)
@@ -241,6 +233,34 @@ function TimerWidgetCardView(props: TimerWidgetCardViewProps) {
     e.preventDefault()
   }, [])
 
+  // Add touch event listeners with { passive: false } to allow preventDefault
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+
+    const onTouchStart = (e: TouchEvent) => {
+      e.preventDefault() // Prevent mouse event emulation
+      handlePressStart()
+    }
+    const onTouchEnd = (e: TouchEvent) => {
+      e.preventDefault()
+      handlePressEnd()
+    }
+    const onTouchCancel = () => {
+      handleCancel()
+    }
+
+    el.addEventListener("touchstart", onTouchStart, { passive: false })
+    el.addEventListener("touchend", onTouchEnd, { passive: false })
+    el.addEventListener("touchcancel", onTouchCancel)
+
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart)
+      el.removeEventListener("touchend", onTouchEnd)
+      el.removeEventListener("touchcancel", onTouchCancel)
+    }
+  }, [handlePressStart, handlePressEnd, handleCancel])
+
   // Determine text color based on state
   let textColorClass = "text-white/70" // idle
   if (props.timerState === "running") {
@@ -251,13 +271,11 @@ function TimerWidgetCardView(props: TimerWidgetCardViewProps) {
 
   return (
     <div
+      ref={containerRef}
       className="w-32 h-32 p-3 flex flex-col bg-gray-600 cursor-pointer select-none touch-manipulation"
       onMouseDown={handlePressStart}
       onMouseUp={handlePressEnd}
       onMouseLeave={handleCancel}
-      onTouchStart={handlePressStart}
-      onTouchEnd={handlePressEnd}
-      onTouchCancel={handleCancel}
       onContextMenu={preventContextMenu}
       style={{ WebkitTapHighlightColor: "transparent" }}
     >
