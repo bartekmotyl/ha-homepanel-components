@@ -5,6 +5,7 @@ import type { CardProps } from "../utils/registerCard"
 interface TimerWidgetCardConfig extends LovelaceCardConfig {
   title?: string
   duration: number // duration in seconds
+  sound?: string // path to sound file, e.g., "/local/timer-alarm.ogg"
 }
 
 type TimerState = "idle" | "running" | "overtime"
@@ -13,16 +14,60 @@ interface TimerData {
   state: TimerState
   startedAt: number | null // timestamp when timer started
   duration: number // configured duration in seconds
+  soundPlaying: boolean // whether sound is currently in repeat cycle
 }
 
 const LONG_PRESS_THRESHOLD_MS = 400
+const SOUND_REPEAT_INTERVAL_MS = 10000
 
 // Module-level storage to persist timer state across re-renders
 const timerStorage = new Map<string, TimerData>()
+const soundIntervals = new Map<string, ReturnType<typeof setInterval>>()
+const audioElements = new Map<string, HTMLAudioElement>()
 
 function getTimerKey(config: TimerWidgetCardConfig | undefined): string {
   // Create a unique key based on config
   return `timer-${config?.title ?? "default"}-${config?.duration ?? 0}`
+}
+
+function playSound(key: string, soundPath: string) {
+  // Get or create audio element
+  let audio = audioElements.get(key)
+  if (!audio) {
+    audio = new Audio(soundPath)
+    audioElements.set(key, audio)
+  }
+  audio.currentTime = 0
+  audio.play().catch(() => {
+    // Ignore autoplay errors (user interaction required)
+  })
+}
+
+function startSoundLoop(key: string, soundPath: string) {
+  // Stop any existing loop
+  stopSoundLoop(key)
+
+  // Play immediately
+  playSound(key, soundPath)
+
+  // Set up repeat interval
+  const interval = setInterval(() => {
+    playSound(key, soundPath)
+  }, SOUND_REPEAT_INTERVAL_MS)
+  soundIntervals.set(key, interval)
+}
+
+function stopSoundLoop(key: string) {
+  const interval = soundIntervals.get(key)
+  if (interval) {
+    clearInterval(interval)
+    soundIntervals.delete(key)
+  }
+  const audio = audioElements.get(key)
+  if (audio) {
+    audio.pause()
+    audio.currentTime = 0
+  }
 }
 
 function getOrCreateTimerData(
@@ -34,6 +79,7 @@ function getOrCreateTimerData(
       state: "idle",
       startedAt: null,
       duration: config?.duration ?? 60,
+      soundPlaying: false,
     })
   }
   return timerStorage.get(key)!
@@ -45,11 +91,13 @@ export function TimerWidgetCard({ config }: CardProps) {
   const configTyped = config as TimerWidgetCardConfig | undefined
   const title = configTyped?.title ?? ""
   const duration = configTyped?.duration ?? 60
+  const sound = configTyped?.sound
 
   // Force re-render trigger
   const [, setTick] = useState(0)
 
   const timerData = getOrCreateTimerData(configTyped)
+  const timerKey = getTimerKey(configTyped)
 
   // Update duration if config changes
   useEffect(() => {
@@ -70,14 +118,17 @@ export function TimerWidgetCard({ config }: CardProps) {
   const handleStart = useCallback(() => {
     timerData.state = "running"
     timerData.startedAt = Date.now()
+    timerData.soundPlaying = false
     setTick((t) => t + 1)
   }, [timerData])
 
   const handleReset = useCallback(() => {
     timerData.state = "idle"
     timerData.startedAt = null
+    timerData.soundPlaying = false
+    stopSoundLoop(timerKey)
     setTick((t) => t + 1)
-  }, [timerData])
+  }, [timerData, timerKey])
 
   // Calculate current display time
   let displaySeconds = duration
@@ -96,6 +147,11 @@ export function TimerWidgetCard({ config }: CardProps) {
       // Update stored state if transitioned to overtime
       if (timerData.state !== "overtime") {
         timerData.state = "overtime"
+      }
+      // Start sound when entering overtime
+      if (!timerData.soundPlaying && sound) {
+        timerData.soundPlaying = true
+        startSoundLoop(timerKey, sound)
       }
     }
   }
