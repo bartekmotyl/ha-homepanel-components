@@ -18,7 +18,7 @@ export function TabsCard({ config }: CardProps) {
 
   return (
     <div
-      className="flex flex-col bg-gray-800 border border-gray-400 "
+      className="flex flex-col bg-gray-800 "
       style={{ width: configTyped?.width, height: configTyped?.height }}
     >
       <div className="flex flex-row w-full pb-1">
