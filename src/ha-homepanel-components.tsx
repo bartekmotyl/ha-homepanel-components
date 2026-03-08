@@ -7,6 +7,7 @@ import { FlexRowContainerCard } from "./cards/FlexRowContainerCard"
 import { SimpleCoverCard } from "./cards/SimpleCoverCard"
 import { TimerWidgetCard } from "./cards/TimerWidgetCard"
 import { ClockWidgetCard } from "./cards/ClockWidgetCard"
+import { IframeWidgetCard } from "./cards/IframeWidgetCard"
 
 // function loadCSS(url: string) {
 //   const link = document.createElement("link")
@@ -31,3 +32,4 @@ registerCard("ha-homepanel-tabs", TabsCard)
 registerCard("ha-homepanel-simple-cover", SimpleCoverCard)
 registerCard("ha-homepanel-timer-widget", TimerWidgetCard)
 registerCard("ha-homepanel-clock", ClockWidgetCard)
+registerCard("ha-homepanel-iframe", IframeWidgetCard)
