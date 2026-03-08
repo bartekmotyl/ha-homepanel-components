@@ -25,10 +25,7 @@ const timerStorage = new Map<string, TimerData>()
 const soundIntervals = new Map<string, ReturnType<typeof setInterval>>()
 const audioElements = new Map<string, HTMLAudioElement>()
 
-function getTimerKey(config: TimerWidgetCardConfig | undefined): string {
-  // Create a unique key based on config
-  return `timer-${config?.title ?? "default"}-${config?.duration ?? 0}`
-}
+let instanceCounter = 0
 
 function playSound(key: string, soundPath: string) {
   // Get or create audio element
@@ -70,21 +67,6 @@ function stopSoundLoop(key: string) {
   }
 }
 
-function getOrCreateTimerData(
-  config: TimerWidgetCardConfig | undefined,
-): TimerData {
-  const key = getTimerKey(config)
-  if (!timerStorage.has(key)) {
-    timerStorage.set(key, {
-      state: "idle",
-      startedAt: null,
-      duration: config?.duration ?? 60,
-      soundPlaying: false,
-    })
-  }
-  return timerStorage.get(key)!
-}
-
 const TimerWidgetCardMemo = memo(TimerWidgetCardView)
 
 export function TimerWidgetCard({ config }: CardProps) {
@@ -93,11 +75,25 @@ export function TimerWidgetCard({ config }: CardProps) {
   const duration = configTyped?.duration ?? 60
   const sound = configTyped?.sound
 
+  // Stable unique key per component instance
+  const instanceId = useRef<number | null>(null)
+  if (instanceId.current === null) {
+    instanceId.current = ++instanceCounter
+  }
+  const timerKey = `timer-${instanceId.current}`
+
   // Force re-render trigger
   const [, setTick] = useState(0)
 
-  const timerData = getOrCreateTimerData(configTyped)
-  const timerKey = getTimerKey(configTyped)
+  if (!timerStorage.has(timerKey)) {
+    timerStorage.set(timerKey, {
+      state: "idle",
+      startedAt: null,
+      duration,
+      soundPlaying: false,
+    })
+  }
+  const timerData = timerStorage.get(timerKey)!
 
   // Update duration if config changes
   useEffect(() => {
